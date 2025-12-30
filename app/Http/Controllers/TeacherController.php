@@ -6,7 +6,8 @@ use App\Models\Teacher;
 use App\Models\SchoolInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Intervention\Image\Facades\Image;
+use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class TeacherController extends Controller
 {
@@ -40,13 +41,13 @@ class TeacherController extends Controller
 
         if ($request->hasFile('image')) {
             $file = $request->file('image');
-            $image = Image::make($file)->orientate()->resize(600, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            })->encode($file->getClientOriginalExtension(), 85);
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($file)
+                ->scaleDown(width: 600)
+                ->toJpeg(quality: 85);
 
-            $filename = 'teachers/' . uniqid() . '.' . $file->getClientOriginalExtension();
-            Storage::put('public/' . $filename, (string) $image);
+            $filename = 'teachers/' . uniqid() . '.jpg';
+            Storage::disk('public')->put($filename, $image);
             $data['image'] = 'storage/' . $filename;
         }
 
@@ -79,13 +80,13 @@ class TeacherController extends Controller
             }
 
             $file = $request->file('image');
-            $image = Image::make($file)->orientate()->resize(600, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            })->encode($file->getClientOriginalExtension(), 85);
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($file)
+                ->scaleDown(width: 600)
+                ->toJpeg(quality: 85);
 
-            $filename = 'teachers/' . uniqid() . '.' . $file->getClientOriginalExtension();
-            Storage::put('public/' . $filename, (string) $image);
+            $filename = 'teachers/' . uniqid() . '.jpg';
+            Storage::disk('public')->put($filename, $image);
             $data['image'] = 'storage/' . $filename;
         }
 
@@ -118,13 +119,13 @@ class TeacherController extends Controller
             }
 
             $file = $request->file('map_image');
-            $image = Image::make($file)->orientate()->resize(1600, null, function ($constraint) {
-                $constraint->aspectRatio();
-                $constraint->upsize();
-            })->encode($file->getClientOriginalExtension(), 85);
+            $manager = new ImageManager(new Driver());
+            $image = $manager->read($file)
+                ->scaleDown(width: 1600)
+                ->toJpeg(quality: 85);
 
-            $filename = 'school/map_' . uniqid() . '.' . $file->getClientOriginalExtension();
-            Storage::put('public/' . $filename, (string) $image);
+            $filename = 'school/map_' . uniqid() . '.jpg';
+            Storage::disk('public')->put($filename, $image);
             $info->map_image = 'storage/' . $filename;
             $info->save();
         }

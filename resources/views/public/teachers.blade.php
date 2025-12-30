@@ -31,12 +31,16 @@
 
     <!-- Main Content -->
     <div class="container mx-auto px-4 py-12">
-        <!-- Back Button -->
-        <div class="text-center mb-8">
-            <a href="/" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
-                ← กลับหน้าหลัก
-            </a>
+<!-- Organizational Structure Map -->
+    @if($schoolInfo && $schoolInfo->map_image)
+    <div class="mb-12">
+        <h2 class="text-2xl font-bold text-gray-900 mb-6">📊 ผังโครงสร้างบุคลากร</h2>
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <img src="{{ asset($schoolInfo->map_image) }}" alt="ผังโครงสร้างบุคลากร" class="w-full h-auto">
         </div>
+    </div>
+    @endif
+
 
         <!-- Page Header -->
         <div class="mb-12">

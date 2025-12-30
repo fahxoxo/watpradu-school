@@ -11,10 +11,15 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h1 class="mb-0">แดชบอร์ด</h1>
-        <form action="{{ route('backup.run') }}" method="POST" onsubmit="return confirm('เริ่มสำรองข้อมูลฐานข้อมูลและไฟล์?')">
-            @csrf
-            <button class="btn btn-warning">เริ่ม Backup</button>
-        </form>
+        <div class="d-flex gap-2">
+            <form action="{{ route('backup.run') }}" method="POST" onsubmit="return confirm('เริ่มสำรองข้อมูลฐานข้อมูลและไฟล์?')" style="display:inline;">
+                @csrf
+                <button class="btn btn-warning">💾 Backup</button>
+            </form>
+            @if($backups->count() > 0)
+                <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#restoreModal">♻️ Restore</button>
+            @endif
+        </div>
     </div>
 
     <div class="row">
@@ -50,5 +55,45 @@
             <li class="list-group-item">[{{ $log->created_at->format('Y-m-d H:i') }}] {{ $log->description }}</li>
         @endforeach
     </ul>
+
+    <!-- Restore Modal -->
+    <div class="modal fade" id="restoreModal" tabindex="-1" aria-labelledby="restoreModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="restoreModalLabel">♻️ Restore จากไฟล์ Backup</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="{{ route('backup.restore') }}" method="POST" onsubmit="return confirm('⚠️ คำเตือน: การ Restore จะแทนที่ข้อมูลปัจจุบัน คุณแน่ใจหรือไม่?')">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="alert alert-warning" role="alert">
+                            <strong>⚠️ ข้อควรระวัง:</strong> การ Restore จะแทนที่ข้อมูลปัจจุบันทั้งหมด กรุณาเลือกไฟล์ให้ถูกต้อง
+                        </div>
+                        
+                        <label class="form-label">เลือกไฟล์ Backup:</label>
+                        <div class="list-group" role="group">
+                            @forelse($backups as $backup)
+                                <label class="list-group-item">
+                                    <input class="form-check-input me-2" type="radio" name="backup_file" value="{{ $backup['filename'] }}" required>
+                                    <strong>{{ $backup['filename'] }}</strong>
+                                    <br>
+                                    <small class="text-muted">
+                                        📅 {{ $backup['date'] }} | 📦 {{ $backup['size'] }}
+                                    </small>
+                                </label>
+                            @empty
+                                <p class="text-muted">ไม่มีไฟล์ Backup ให้เลือก</p>
+                            @endforelse
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ยกเลิก</button>
+                        <button type="submit" class="btn btn-danger">♻️ Restore เลย</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection

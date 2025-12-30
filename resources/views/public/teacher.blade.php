@@ -38,12 +38,7 @@
             <span class="text-gray-800 font-medium">{{ $teacher->name }}</span>
         </div>
 
-        <!-- Back Button -->
-        <div class="text-center mb-8">
-            <a href="/" class="inline-block px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
-                ← กลับหน้าหลัก
-            </a>
-        </div>
+
 
         <!-- Teacher Profile -->
         <div class="bg-white rounded-lg shadow-lg overflow-hidden mb-12">

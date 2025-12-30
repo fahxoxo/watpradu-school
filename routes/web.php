@@ -96,12 +96,17 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
+    // Backup & Restore
+    Route::post('/backup', [DashboardController::class, 'backup'])->name('backup.run');
+    Route::post('/restore', [DashboardController::class, 'restore'])->name('backup.restore');
+    
     // 1. ข้อมูลโรงเรียน
     Route::get('/school-info', [SchoolInfoController::class, 'edit'])->name('school-info.edit');
     Route::put('/school-info', [SchoolInfoController::class, 'update'])->name('school-info.update');
     
     // Resource Routes สำหรับ CRUD ทั่วไป
-    Route::resource('teachers', App\Http\Controllers\TeacherController::class);
+    Route::get('/teachers-manage', [App\Http\Controllers\TeacherController::class, 'index'])->name('teachers.index');
+    Route::resource('teachers', App\Http\Controllers\TeacherController::class)->except(['index', 'show']);
     Route::post('teachers/map', [App\Http\Controllers\TeacherController::class, 'mapUpdate'])->name('teachers.map.update');
     Route::delete('teachers/map', [App\Http\Controllers\TeacherController::class, 'mapDestroy'])->name('teachers.map.destroy');
     Route::post('posts/{post}/toggle', [App\Http\Controllers\PostController::class, 'toggle'])->name('posts.toggle');
@@ -114,9 +119,6 @@ Route::middleware(['auth'])->group(function () {
     // Allow admin to view list, edit status, and update status
     Route::resource('suggestions', App\Http\Controllers\SuggestionController::class)->only(['index', 'edit', 'update']);
     Route::get('suggestions/export', [App\Http\Controllers\SuggestionController::class, 'exportPdf'])->name('suggestions.export');
-
-    // Backup (เริ่มสำรองข้อมูลผ่านหน้าเว็บ) - ใช้ POST เพื่อป้องกัน CSRF
-    Route::post('/backup', [DashboardController::class, 'backup'])->name('backup.run');
     
     // Buildings Admin - Manual routes to avoid parameter naming issues
     Route::get('/buildings-manage', [App\Http\Controllers\BuildingController::class, 'index'])->name('buildings.index');

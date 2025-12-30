@@ -82,7 +82,7 @@
                             <a href="/about" class="block px-4 py-2 hover:bg-blue-50 text-gray-700 border-b">ข้อมูลทั่วไป</a>
                             <a href="/motto" class="block px-4 py-2 hover:bg-blue-50 text-gray-700 border-b">วิสัยทัศน์/พันธกิจ</a>
                             <a href="/financial" class="block px-4 py-2 hover:bg-blue-50 text-gray-700 border-b">ข้อมูลการเงิน</a>
-                            <a href="/teacher" class="block px-4 py-2 hover:bg-blue-50 text-gray-700 border-b">ข้อมูลบุคลากร</a>
+                            <a href="/teachers" class="block px-4 py-2 hover:bg-blue-50 text-gray-700 border-b">ข้อมูลบุคลากร</a>
                             <a href="{{ route('students.public') }}" class="block px-4 py-2 hover:bg-blue-50 text-gray-700 border-b">ข้อมูลนักเรียน</a>
                             <a href="{{ route('buildings.public') }}" class="block px-4 py-2 hover:bg-blue-50 text-gray-700">ข้อมูลอาคาร สถานที่</a>
                         </div>
