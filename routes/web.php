@@ -7,6 +7,26 @@ use App\Models\Post;
 use App\Models\SchoolInfo;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+// Serve files from storage/app/public
+Route::get('/storage/{path}', function ($path) {
+    $disk = Storage::disk('public');
+    $fullPath = storage_path('app/public/' . $path);
+    
+    if (!file_exists($fullPath) || !$disk->exists($path)) {
+        abort(404, 'File not found');
+    }
+    
+    $mimeType = $disk->mimeType($path);
+    $size = filesize($fullPath);
+    
+    return response(file_get_contents($fullPath), 200, [
+        'Content-Type' => $mimeType,
+        'Content-Length' => $size,
+        'Cache-Control' => 'public, max-age=31536000',
+    ]);
+})->where('path', '.*')->name('storage.serve');
 
 Route::get('/', function () {
     $pinnedPosts = Post::where('pinned', true)->where('active', true)->latest()->get();
@@ -22,7 +42,7 @@ Route::get('/posts/{post}', function (Post $post) {
     $schoolInfo = App\Models\SchoolInfo::first();
     if (!$post->active) abort(404);
     return view('posts.show', compact('post', 'schoolInfo'));
-})->name('posts.show');
+})->where('post', '[0-9]+')->name('posts.show');
 
 // Public suggestion form - pass schoolInfo for logo
 Route::get('/suggestions/create', function () {
@@ -106,11 +126,15 @@ Route::middleware(['auth'])->group(function () {
     
     // Resource Routes สำหรับ CRUD ทั่วไป
     Route::get('/teachers-manage', [App\Http\Controllers\TeacherController::class, 'index'])->name('teachers.index');
-    Route::resource('teachers', App\Http\Controllers\TeacherController::class)->except(['index', 'show']);
+    Route::get('/teachers-manage/create', [App\Http\Controllers\TeacherController::class, 'create'])->name('teachers.create');
+    Route::post('/teachers-manage', [App\Http\Controllers\TeacherController::class, 'store'])->name('teachers.store');
+    Route::get('/teachers-manage/{teacher}/edit', [App\Http\Controllers\TeacherController::class, 'edit'])->name('teachers.edit');
+    Route::put('/teachers-manage/{teacher}', [App\Http\Controllers\TeacherController::class, 'update'])->name('teachers.update');
+    Route::delete('/teachers-manage/{teacher}', [App\Http\Controllers\TeacherController::class, 'destroy'])->name('teachers.destroy');
     Route::post('teachers/map', [App\Http\Controllers\TeacherController::class, 'mapUpdate'])->name('teachers.map.update');
     Route::delete('teachers/map', [App\Http\Controllers\TeacherController::class, 'mapDestroy'])->name('teachers.map.destroy');
-    Route::post('posts/{post}/toggle', [App\Http\Controllers\PostController::class, 'toggle'])->name('posts.toggle');
     Route::resource('posts', App\Http\Controllers\PostController::class)->except(['show']);
+    Route::post('posts/{post}/toggle', [App\Http\Controllers\PostController::class, 'toggle'])->name('posts.toggle');
     Route::resource('events', App\Http\Controllers\EventController::class);
     Route::get('events/json', [App\Http\Controllers\EventController::class, 'json'])->name('events.json');
     Route::resource('galleries', App\Http\Controllers\GalleryController::class);

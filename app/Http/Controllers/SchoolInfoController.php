@@ -43,7 +43,7 @@ class SchoolInfoController extends Controller
             $file = $request->file('logo');
             $filename = 'logo_' . time() . '.' . $file->getClientOriginalExtension();
             $path = Storage::disk('public')->putFileAs('school', $file, $filename);
-            $info->logo = asset('storage/' . $path);
+            $info->logo = 'storage/' . $path;
         }
 
         // จัดการอัพโหลดรูป Screen
@@ -55,7 +55,7 @@ class SchoolInfoController extends Controller
             $file = $request->file('screen');
             $filename = 'screen_' . time() . '.' . $file->getClientOriginalExtension();
             $path = Storage::disk('public')->putFileAs('school', $file, $filename);
-            $info->screen = asset('storage/' . $path);
+            $info->screen = 'storage/' . $path;
         }
 
         // จัดการอัพโหลดรูป Map (optional)
@@ -67,7 +67,7 @@ class SchoolInfoController extends Controller
             $file = $request->file('map_image');
             $filename = 'map_' . time() . '.' . $file->getClientOriginalExtension();
             $path = Storage::disk('public')->putFileAs('school', $file, $filename);
-            $info->map_image = asset('storage/' . $path);
+            $info->map_image = 'storage/' . $path;
         }
 
         // บันทึกฟิลด์อื่น ๆ

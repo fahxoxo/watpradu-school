@@ -66,7 +66,7 @@ class PostController extends Controller
 
         Post::create($data);
 
-        return redirect()->route('posts.admin.index')->with('success', 'บันทึกข่าว/กิจกรรมเรียบร้อย');
+        return redirect('/posts')->with('success', 'บันทึกข่าว/กิจกรรมเรียบร้อย');
     }
 
     public function edit(Post $post)
@@ -96,7 +96,7 @@ class PostController extends Controller
 
         $post->update($data);
 
-        return redirect()->route('posts.admin.index')->with('success', 'อัพเดตข่าว/กิจกรรมเรียบร้อย');
+        return redirect('/posts')->with('success', 'อัพเดตข่าว/กิจกรรมเรียบร้อย');
     }
 
     public function destroy(Post $post)
@@ -105,7 +105,7 @@ class PostController extends Controller
             Storage::disk('public')->delete($post->image);
         }
         $post->delete();
-        return redirect()->route('posts.admin.index')->with('success', 'ลบข่าว/กิจกรรมเรียบร้อย');
+        return redirect('/posts')->with('success', 'ลบข่าว/กิจกรรมเรียบร้อย');
     }
 
     public function toggle(Request $request, Post $post)

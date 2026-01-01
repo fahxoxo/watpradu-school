@@ -3,7 +3,7 @@
 @section('content')
 <h3>เพิ่มข้อมูลสถิติ นักเรียน</h3>
 
-<form action="{{ route('student-stats.store') }}" method="POST">
+<form action="/student-stats" method="POST">
     @csrf
 
     <div class="mb-3">

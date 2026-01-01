@@ -16,7 +16,7 @@
                 @csrf
                 <button class="btn btn-warning">💾 Backup</button>
             </form>
-            @if($backups->count() > 0)
+            @if(count($backups) > 0)
                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#restoreModal">♻️ Restore</button>
             @endif
         </div>

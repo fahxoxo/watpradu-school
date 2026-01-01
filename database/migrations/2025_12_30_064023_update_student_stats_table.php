@@ -43,7 +43,11 @@ return new class extends Migration
             $table->integer('grade_m3_girls')->default(0)->after('grade_m3_boys');
         });
     }
-};    public function down(): void
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
     {
         Schema::table('student_stats', function (Blueprint $table) {
             $table->dropColumn([
@@ -61,4 +65,4 @@ return new class extends Migration
                 'grade_m3_boys', 'grade_m3_girls',
             ]);
         });
-    }
+    }};

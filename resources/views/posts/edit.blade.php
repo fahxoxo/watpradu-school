@@ -3,7 +3,7 @@
 @section('content')
 <h3>แก้ไขข่าว/กิจกรรม - {{ $post->title }}</h3>
 
-<form action="{{ route('posts.update', $post) }}" method="POST" enctype="multipart/form-data">
+<form action="/posts/{{ $post->id }}" method="POST" enctype="multipart/form-data">
     @csrf
     @method('PUT')
 
@@ -52,7 +52,7 @@
 
     <div class="mt-3">
         <button class="btn btn-success">อัพเดต</button>
-        <a href="{{ route('posts.admin.index') }}" class="btn btn-secondary">ยกเลิก</a>
+        <a href="/posts" class="btn btn-secondary">ยกเลิก</a>
     </div>
 </form>
 @endsection

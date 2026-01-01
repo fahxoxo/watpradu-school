@@ -3,7 +3,7 @@
 @section('content')
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h3>ข่าวและกิจกรรม</h3>
-    <a href="{{ route('posts.create') }}" class="btn btn-primary">+ เพิ่ม</a>
+    <a href="/posts/create" class="btn btn-primary">+ เพิ่ม</a>
 </div>
 
 <form method="GET" class="row g-2 mb-3">
